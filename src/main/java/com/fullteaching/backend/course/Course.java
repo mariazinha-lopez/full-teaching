@@ -21,35 +21,37 @@ import com.fullteaching.backend.coursedetails.CourseDetails;
 
 @Entity
 public class Course {
-	
-	public interface SimpleCourseList {}
-	
+
+	public interface SimpleCourseList {
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@JsonView(SimpleCourseList.class)
 	private long id;
-	
+
 	@JsonView(SimpleCourseList.class)
 	private String title;
-	
+
 	@JsonView(SimpleCourseList.class)
 	private String image;
-	
+
 	@ManyToOne
 	private User teacher;
-	
-	@OneToOne(cascade=CascadeType.ALL)
+
+	@OneToOne(cascade = CascadeType.ALL)
 	private CourseDetails courseDetails;
-	
+
 	@JsonView(SimpleCourseList.class)
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="course")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "course")
 	private Set<Session> sessions;
-	
+
 	@ManyToMany
 	private Set<User> attenders;
-	
-	public Course() {}
-	
+
+	public Course() {
+	}
+
 	public Course(String title, String image, User teacher) {
 		this.title = title;
 		this.image = image;
@@ -67,7 +69,7 @@ public class Course {
 		this.sessions = new HashSet<>();
 		this.attenders = new HashSet<User>();
 	}
-	
+
 	public long getId() {
 		return id;
 	}
@@ -83,7 +85,7 @@ public class Course {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public String getImage() {
 		return image;
 	}
@@ -123,19 +125,31 @@ public class Course {
 	public void setSessions(Set<Session> sessions) {
 		this.sessions = sessions;
 	}
-	
+
 	//To make 'user.getCourse().remove(course)' possible
-	@Override
-	public boolean equals(Object other){
-	    if (other == null) return false;
-	    if (other == this) return true;
-	    if (!(other instanceof Course))return false;
-	    Course otherCourse = (Course)other;
-	    return (otherCourse.id == this.id);
+	@Override 
+	public boolean equals(Object other) {
+		
+		if (other == null) {
+			System.out.println("other==null");
+			return false;
+		}
+		if (other == this) {
+			System.out.println("other==this");
+			return true;
+		}
+		if (!(other instanceof Course)) {
+			System.out.println("!(other instanceof Course)");
+			return false;
+		}
+		System.out.println("Não entrou em nada");
+		Course otherCourse = (Course)other;
+		return (otherCourse.id == this.id); 
 	}
 	
 	@Override
 	public String toString() {
-		return "Course[title: \"" + this.title + "\", teacher: \"" + this.teacher.getNickName() + "\", #attenders: " + this.attenders.size() + ", #sessions: " + this.sessions.size() + "]";
+		return "Course[title: \"" + this.title + "\", teacher: \"" + this.teacher.getNickName() + "\", #attenders: "
+				+ this.attenders.size() + ", #sessions: " + this.sessions.size() + "]";
 	}
 }
