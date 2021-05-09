@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
@@ -29,8 +32,9 @@ public class CourseTest {
     
     public User attender;
     public User attender1;
-    
+
     public CourseDetails cd1;
+    public CourseDetails cd2;
     
     public Session s1;
     public Session s2;
@@ -39,19 +43,18 @@ public class CourseTest {
     
     @BeforeEach
     public void setup() {
-        teacher = new User("Simone","password", "sisi", "", "");
-    	teacher1 = new User("Maria","123456", "mariazinha", "", "");
+    	teacher = mock(User.class);
+        teacher1 = mock(User.class); 
         
-    	attender = new User("Camila","1234", "cami", "", "");
-        attender1 = new User("Malu","222", "malu", "", "");
+        attender = mock(User.class);
+        attender1 = mock(User.class);
         
+        cd1 = mock(CourseDetails.class);
+        cd2 = mock(CourseDetails.class);
         
-        cd1 = new CourseDetails(course);
-        cd1.setId(11);
+        s1 = mock(Session.class);
+        s2 = mock(Session.class);
         
-        s1 = new Session("Se��o1","Esta � a se��o 1", 1619126959);
-        s2 = new Session("Se��o2","Esta � a se��o 2", 1849126959);        
-    
         course = new Course("Qualidade e Teste", "qEt", teacher, cd1);
     	course1 = new Course("Metaheuristica", "meta", teacher1);
     	course2 = new Course("Governancia de TI", "govTI", teacher1);
@@ -61,9 +64,20 @@ public class CourseTest {
     	course2.setId(2);
 		course3.setId(3);
 		
-		f = new Forum();
+		f = mock(Forum.class);
 		
     }
+    
+    @Test
+	public void testGetId() {
+		assertEquals(0, course.getId());
+	}
+	
+	@Test
+	public void testSetId() {
+		course.setId(2);
+		assertEquals(2, course.getId());
+	}
 
     @Test
     public void testGetTitle() {
@@ -93,26 +107,22 @@ public class CourseTest {
 
 	@Test
 	public void testGetTeacher() {
-		User teacher = course.getTeacher();
 		assertEquals(teacher, course.getTeacher());
 	}
 
 	@Test
 	public void testSetTeacher() {
-		User teacher3 = new User("Cintia","1212", "cindy", "", "");
-		course2.setTeacher(teacher3);
-		assertEquals(teacher3, course2.getTeacher());
+		course2.setTeacher(teacher);
+		assertEquals(teacher, course2.getTeacher());
 	}
 
 	@Test
 	public void testGetCourseDetails() {
-		CourseDetails cd = course.getCourseDetails();
-		assertEquals(cd, course.getCourseDetails());
+		assertEquals(cd1, course.getCourseDetails());
 	}
 
 	@Test
 	public void testSetCourseDetails() {
-		CourseDetails cd2 = new CourseDetails();
 		course.setCourseDetails(cd2);
 		assertEquals(cd2, course.getCourseDetails());
 	}
@@ -124,7 +134,9 @@ public class CourseTest {
         lsUsers.add(attender);
         lsUsers.add(attender1);
         course.setAttenders(lsUsers);
-        assertIterableEquals(lsUsers, course.getAttenders());
+        Set<User> courseAttenders = course.getAttenders();
+       	assertTrue(lsUsers.equals(courseAttenders));
+        //assertIterableEquals(lsUsers, course.getAttenders());
 	}
 
 	@Test
@@ -134,7 +146,9 @@ public class CourseTest {
         lsUsers.add(attender);
         lsUsers.add(attender1);
         course.setAttenders(lsUsers);
-        assertIterableEquals(lsUsers, course.getAttenders());
+        Set<User> courseAttenders = course.getAttenders();
+       	assertTrue(lsUsers.equals(courseAttenders));
+        //assertIterableEquals(lsUsers, course.getAttenders());
 	}
 
 	@Test
@@ -144,7 +158,9 @@ public class CourseTest {
         lsSessions.add(s1);
         lsSessions.add(s2);
         course.setSessions(lsSessions);
-        assertIterableEquals(lsSessions, course.getSessions());
+        Set<Session> courseSessions = course.getSessions();
+       	assertTrue(lsSessions.equals(courseSessions));
+        //assertIterableEquals(lsSessions, course.getSessions());
 	}
 
 	@Test
@@ -153,12 +169,14 @@ public class CourseTest {
         lsSessions = new HashSet<Session>();
         lsSessions.add(s1);
         course.setSessions(lsSessions);
-        assertIterableEquals(lsSessions, course.getSessions());
+        Set<Session> courseSessions = course.getSessions();
+       	assertTrue(lsSessions.equals(courseSessions));
+        //assertIterableEquals(lsSessions, course.getSessions());
 	}
 	
 	@Test
    	public void testToString() { 
-		Assertions.assertEquals("Course[title: \"Governancia de TI\", teacher: \"mariazinha\", #attenders: 0, #sessions: 0]", course2.toString(), "SAO DIFERENTES!");
+		Assertions.assertEquals("Course[title: \"Governancia de TI\", teacher: \"null\", #attenders: 0, #sessions: 0]", course2.toString(), "SAO DIFERENTES!");
 		
 	}
 	

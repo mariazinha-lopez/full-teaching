@@ -1,13 +1,11 @@
 package com.fullteaching.backend.comment;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,6 @@ import com.fullteaching.backend.user.User;
 public class CommentTest {
 
     public Comment comentario;
-    public Comment comentario1;
     public Comment comentario2;
     public User usuario;
     public User usuario2;
@@ -26,8 +23,9 @@ public class CommentTest {
     @BeforeEach
     public void setup() {
 
-        usuario = new User("Simone","password", "sisi", "", "");
-        usuario2 = new User("Camila","1234", "cami", "", "");
+    	
+        usuario = mock(User.class);
+        usuario2 = mock(User.class);
         comentario= new Comment("message", 1619126959, usuario);
         comentario2= new Comment("message", 1849126959, usuario2, comentario);
     }
@@ -49,6 +47,7 @@ public class CommentTest {
     public void testGetDate() {
     	long date = comentario.getDate();
     	assertEquals(1619126959, date);
+    	
     }
     
     @Test 
@@ -60,22 +59,26 @@ public class CommentTest {
     
     @Test
     public void testGetReplies() {
-    	List listaComentario = new ArrayList<Comment>();
-    	listaComentario.add(comentario1);
+       	List listaComentario = new ArrayList<Comment>();
+    	listaComentario.add(comentario);
     	listaComentario.add(comentario2);
     	comentario.setReplies(listaComentario);
     	//Arrays.deepEquals(listaComentario, comentario.getReplies());
-    	assertIterableEquals(listaComentario, comentario.getReplies());
+    	//assertIterableEquals(listaComentario, comentario.getReplies());
+    	List comReplies = comentario.getReplies();
+       	assertTrue(listaComentario.equals(comReplies));
     }
     
     @Test
     public void testSetReplies() {
     	List listaComentario = new ArrayList<Comment>();
-    	listaComentario.add(comentario1);
+    	listaComentario.add(comentario);
     	listaComentario.add(comentario2);
     	comentario.setReplies(listaComentario);
     	//Arrays.deepEquals(listaComentario, comentario.getReplies());
-    	assertIterableEquals(listaComentario, comentario.getReplies());
+    	//assertIterableEquals(listaComentario, comentario.getReplies());
+    	List comReplies = comentario.getReplies();
+       	assertTrue(listaComentario.equals(comReplies));
     }
     
     @Test
@@ -103,7 +106,7 @@ public class CommentTest {
    	
    	@Test
    	public void testToString() { 
-   		Assertions.assertEquals("Comment[message: \"message\", author: \"cami\", parent: \"message\", #replies: 0date: \"1849126959\"]", comentario2.toString(), "SÃO DIFERENTES!");
+   		Assertions.assertEquals("Comment[message: \"message\", author: \"null\", parent: \"message\", #replies: 0date: \"1849126959\"]", comentario2.toString(), "Sï¿½O DIFERENTES!");
    	}
    	
 }
