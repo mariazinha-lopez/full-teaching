@@ -1,5 +1,7 @@
 package com.fullteaching.backend.entry;
 
+import static org.mockito.Mockito.mock;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,11 +25,11 @@ public class EntryTest {
 	
 	@BeforeEach
     public void setup() {
-		teacher = new User("Simone","password", "sisi", "", "");
-		teacher1 = new User("Maria","123", "mari", "", "");
+		teacher = mock (User.class);
+		teacher1 = mock (User.class);
     	
-    	comentario= new Comment("message", 1619126959, teacher);
-        comentario1= new Comment("message", 1849126959, teacher1, comentario);
+    	comentario= mock (Comment.class);
+        comentario1= mock (Comment.class);
         
         e1 = new Entry("title Entry", 1619126959, teacher);
 	}
@@ -87,19 +89,17 @@ public class EntryTest {
 	
 	@Test
 	public void testGetUser() {
-		User user = e1.getUser();
-		assertEquals("sisi", user.getNickName());
+		assertEquals(teacher, e1.getUser());
 	}
 	
 	@Test
 	public void testSetUser() {
 		e1.setUser(teacher1);
-		User user = e1.getUser();
-		assertEquals("mari", user.getNickName());
+		assertEquals(teacher1, e1.getUser());
 	}
 	
 	@Test
 	public void testToString() {
-		Assertions.assertEquals("Entry[title: \"title Entry\", author: \"sisi\", date: 1619126959, #comments: 0]", e1.toString(), "S�O DIFERENTES!");
+		Assertions.assertEquals("Entry[title: \"title Entry\", author: \"null\", date: 1619126959, #comments: 0]", e1.toString(), "S�O DIFERENTES!");
 	}
 }
