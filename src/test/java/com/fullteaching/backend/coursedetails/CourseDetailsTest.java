@@ -1,14 +1,14 @@
 package com.fullteaching.backend.coursedetails;
 
+import static org.mockito.Mockito.mock;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,6 @@ public class CourseDetailsTest {
 	
 		public User teacher;
 		public User teacher1;
-		public User teacher2;
 		
 		public Course course;
 		public Course course1;
@@ -32,7 +31,7 @@ public class CourseDetailsTest {
 		
 		public FileGroup fg;
 		public FileGroup fg1;
-		public FileGroup fg2;
+
 		
 		public CourseDetails cd;
 		public CourseDetails cd1;
@@ -40,23 +39,19 @@ public class CourseDetailsTest {
 		
 	    @BeforeEach
 	    public void setup() {
-	        teacher = new User("Simone","password", "sisi", "", "");
-	    	teacher1 = new User("Maria","123456", "mariazinha", "", "");
-	    	teacher2 = new User("Dolores","123", "dolores", "", "");
-	    			
-	        course = new Course("Qualidade e Teste", "qEt", teacher, cd);
-	    	course1 = new Course("Metaheuristica", "meta", teacher1, cd1);
-	    	course2 = new Course("Governancia de TI", "govTI", teacher2, cd2);
-	    	//os id's dos cursos nao sao inicializados, assim todos os cursos quando criado tem o id=0
-	    	course1.setId(1);
-	    	course2.setId(2);
-			
-	    	forum = new Forum(true);
-	    	forum1 = new Forum(false);
+	        teacher = mock(User.class);
+	    	teacher1 = mock(User.class);
+	    		    			
+	        course = mock(Course.class);
+	    	course1 = mock(Course.class);
+	    	course2 = mock(Course.class);
 	    	
-	    	fg = new FileGroup("fileGroup_0");
-	    	fg1 = new FileGroup("fileGroup_1");
-	    	fg2 = new FileGroup("fileGroup_2");
+	    	forum = mock(Forum.class);
+	    	forum1 = mock(Forum.class);
+	    	
+	    	fg = mock(FileGroup.class);
+	    	fg1 = mock(FileGroup.class);
+	    	
 	    	
 	    	cd = new CourseDetails(course);
 	    	cd.setId(10);
@@ -95,19 +90,27 @@ public class CourseDetailsTest {
 	    @Test
 	    public void testGetForum() {
 	    	cd.setForum(forum);
-	    	Forum f = cd.getForum();
-	    	assertTrue(f.isActivated());
+	    	assertEquals(forum, cd.getForum());
 	    }
 	    
 	    @Test
 	    public void testSetForum() {
 	    	cd.setForum(forum1);
-	    	Forum f = cd.getForum();
-	    	assertFalse(f.isActivated());
+	    	assertEquals(forum1, cd.getForum());
 	    }
 	    
 	    @Test
 	    public void testGetFiles() {
+	    	List listFile = new ArrayList<FileGroup>();
+	    	listFile.add(fg);
+	    	listFile.add(fg1);
+	    	cd.setFiles(listFile);
+	    	List cdFiles = cd.getFiles();
+	       	assertTrue(listFile.equals(cdFiles));
+	    }
+	    
+	    @Test
+	    public void testSetFiles() {
 	    	List listFile = new ArrayList<FileGroup>();
 	    	listFile.add(fg);
 	    	listFile.add(fg1);
